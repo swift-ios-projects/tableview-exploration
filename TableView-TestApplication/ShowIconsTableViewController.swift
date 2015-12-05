@@ -10,15 +10,24 @@ import UIKit
 
 class ShowIconsTableViewController: UITableViewController {
 
-    var icons = [Icon]()
+    
+    @IBOutlet weak var myTableView: UITableView!
+    
+    var iconSets = [IconSet]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Initialize iconSet from iconsets Iconsets.swift, then set a variable to be the first set of icons store them in icons variable
-        let iconSets = IconSet.iconSets()
-        let iconSet = iconSets[0]
-        icons = iconSet.icons
+        
+        iconSets = IconSet.iconSets()
+        
+        // Allows the user to click a row when editing modeis enabled
+        tableView.allowsSelectionDuringEditing = true
+        
+        // edit button code
+        navigationItem.rightBarButtonItem = editButtonItem()
+
         
     }
 
@@ -26,33 +35,148 @@ class ShowIconsTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+}
 
     // MARK: - Table view data source
 
+extension ShowIconsTableViewController {
+    
+    // set editing functionallity for the edit button to delete rows
+    override func setEditing(editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        if editing {
+            
+            // Start and end updates after this code block
+            // This code is to add a new row to the index by enumerating through the rows and then adding a row at the indexPath
+            tableView.beginUpdates()
+            for (index, set) in iconSets.enumerate() {
+                let indexPath = NSIndexPath(forItem: set.icons.count, inSection: index)
+                
+                tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            }
+            tableView.endUpdates()
+            
+            tableView.setEditing(true, animated: true)
+        } else {
+            tableView.beginUpdates()
+            for (index, set) in iconSets.enumerate() {
+                let indexPath = NSIndexPath(forItem: set.icons.count, inSection: index)
+                
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            }
+            tableView.endUpdates()
+            tableView.setEditing(false, animated: true)
+        }
+    }
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
+        
+        return iconSets.count
+        
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return icons.count
+        // create variable with iconsets array with all sections, then return the total array icons count
+        
+        let adjustment = editing ? 1 : 0
+        
+        let iconSet = iconSets[section]
+        return iconSet.icons.count + adjustment
     }
-
+    
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        // create iconSet as array of sections, return iconset names. See Iconset file for details.
+        let iconSet = iconSets[section]
+        return iconSet.name
+    }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("IconCell", forIndexPath: indexPath)
-
-        let icon = icons[indexPath.row]
-        cell.textLabel?.text = icon.title
-        cell.detailTextLabel?.text = icon.subtitle
-        if let iconImage = icon.image {
-            cell.imageView?.image = iconImage
+        
+        //set icon set to array of all sections
+        let iconSet = iconSets[indexPath.section]
+        
+        if indexPath.row >= iconSet.icons.count && editing {
+            
+            cell.textLabel?.text = "Add Row"
+            cell.detailTextLabel?.text = nil
+            cell.imageView?.image = nil
+            
+        } else {
+            
+            let icon = iconSet.icons[indexPath.row]
+            
+            cell.textLabel?.text = icon.title
+            cell.detailTextLabel?.text = icon.subtitle
+            if let iconImage = icon.image {
+                cell.imageView?.image = iconImage
+                
+            } else {
+                // sets image in a new row to empty instead of recycling the images for a new cell
+                cell.imageView?.image = nil
+            }
         }
-
+        
         return cell
     }
     
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        // check if editing style is .Delete
+        if editingStyle == .Delete {
+            
+            let set = iconSets[indexPath.section]
+            set.icons.removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        
+        } else if editingStyle == .Insert {
+            
+            // This block of code adds a new row when the inset editing style button is tapped
+            let newIcon = Icon(withTitle: "New Icon", subtitle: "", imageName: nil)
+            let set = iconSets[indexPath.section]
+            set.icons.append(newIcon)
+            tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            
+        }
+    }
+    
+    // this function controlls the button that show on the left side in editing mode
+    override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        
+        // create set variable to reference
+        let set = iconSets[indexPath.section]
+        
+        // if row is bigger than the set count them add insert button, else return the delete button
+        if indexPath.row >= set.icons.count {
+            return .Insert
+        }
+        return .Delete
+    }
+    
+    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        
+        let set = iconSets[indexPath.section]
+        if editing && indexPath.row < set.icons.count {
+            return nil
+        }
+        
+        return indexPath
+    }
+    
+    // This function allows for the user to tap on a row in  editing mode
+    // if the set is bigger than the count of the section then 
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        let set = iconSets[indexPath.section]
+        if indexPath.row >= set.icons.count && editing {
+            self.tableView(tableView, commitEditingStyle: .Insert, forRowAtIndexPath: indexPath)
+        }
+    }
+}
+
 
     /*
     // Override to support conditional editing of the table view.
@@ -99,4 +223,4 @@ class ShowIconsTableViewController: UITableViewController {
     }
     */
 
-}
+

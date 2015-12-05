@@ -9,14 +9,14 @@
         <scene sceneID="UGZ-aE-Htd">
             <objects>
                 <tableViewController id="iNG-D8-xi1" customClass="ShowIconsTableViewController" customModule="TableView_TestApplication" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="kdU-vR-vZI">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="kdU-vR-vZI">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <animations/>
-                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="IconCell" textLabel="yWp-4P-amy" detailTextLabel="tUU-ib-2yD" style="IBUITableViewCellStyleSubtitle" id="A29-F2-99W">
-                                <rect key="frame" x="0.0" y="114" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="A29-F2-99W" id="zv9-ey-Mp1">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -50,6 +50,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Show Icons" id="s2r-2c-YGN"/>
+                    <connections>
+                        <outlet property="myTableView" destination="kdU-vR-vZI" id="z7d-i0-btT"/>
+                        <outlet property="tableView" destination="kdU-vR-vZI" id="5db-So-7Df"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S0Q-9f-627" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
