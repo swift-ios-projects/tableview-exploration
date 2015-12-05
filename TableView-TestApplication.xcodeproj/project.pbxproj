@@ -62,16 +62,16 @@
 		E113A7151C116B26007C8A0C /* TableView-TestApplication */ = {
 			isa = PBXGroup;
 			children = (
-				E113A7291C116C20007C8A0C /* Icons */,
-				E113A72B1C116C20007C8A0C /* Images */,
 				E113A7161C116B26007C8A0C /* AppDelegate.swift */,
+				E113A7281C116C20007C8A0C /* Icon.swift */,
+				E113A7291C116C20007C8A0C /* Icons */,
+				E113A72A1C116C20007C8A0C /* IconSet.swift */,
+				E113A72B1C116C20007C8A0C /* Images */,
 				E113A7181C116B26007C8A0C /* ViewController.swift */,
 				E113A71A1C116B26007C8A0C /* Main.storyboard */,
 				E113A71D1C116B26007C8A0C /* Assets.xcassets */,
 				E113A71F1C116B26007C8A0C /* LaunchScreen.storyboard */,
 				E113A7221C116B26007C8A0C /* Info.plist */,
-				E113A7281C116C20007C8A0C /* Icon.swift */,
-				E113A72A1C116C20007C8A0C /* IconSet.swift */,
 			);
 			path = "TableView-TestApplication";
 			sourceTree = "<group>";
@@ -300,7 +300,6 @@
 				E113A7271C116B26007C8A0C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
