@@ -175,6 +175,43 @@ extension ShowIconsTableViewController {
             self.tableView(tableView, commitEditingStyle: .Insert, forRowAtIndexPath: indexPath)
         }
     }
+    
+    // checking if this is a row or an ad icon row
+    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        let iconSet = iconSets[indexPath.section]
+        if indexPath.row >= iconSet.icons.count && editing {
+            return false
+        }
+        return true
+    }
+    
+    override func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+        let sourceSet = iconSets[sourceIndexPath.section]
+        let destinationSet = iconSets[destinationIndexPath.section]
+        let iconToMove = sourceSet.icons[sourceIndexPath.row]
+        
+        // checking if they are the same, if not then swap them
+        if sourceSet == destinationSet {
+            if destinationIndexPath.row != sourceIndexPath.row {
+                swap(&destinationSet.icons[destinationIndexPath.row], &destinationSet.icons[sourceIndexPath.row])
+            }
+        } else {
+            // if not then we will have to remove an icon and add it to the destimation set
+            destinationSet.icons.insert(iconToMove, atIndex: destinationIndexPath.row)
+            sourceSet.icons.removeAtIndex(sourceIndexPath.row)
+        }
+    }
+    
+    // checking wether you can move something to a correct index path, otherwise provide a new one
+    // stops an error whe you drop a cell beyond the add cell button
+    override func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
+        
+        let set = iconSets[proposedDestinationIndexPath.section]
+        if proposedDestinationIndexPath.row >= set.icons.count {
+            return NSIndexPath(forItem: set.icons.count-1, inSection: proposedDestinationIndexPath.section)
+        }
+        return proposedDestinationIndexPath
+    }
 }
 
 
