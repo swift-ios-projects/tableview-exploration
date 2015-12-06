@@ -27,6 +27,8 @@ class ShowIconsTableViewController: UITableViewController {
         
         // edit button code
         navigationItem.rightBarButtonItem = editButtonItem()
+        tableView.estimatedRowHeight = 67.0
+        tableView.rowHeight = UITableViewAutomaticDimension
 
         
     }
@@ -93,12 +95,15 @@ extension ShowIconsTableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("IconCell", forIndexPath: indexPath)
+        
+        let cell: UITableViewCell
         
         //set icon set to array of all sections
         let iconSet = iconSets[indexPath.section]
         
         if indexPath.row >= iconSet.icons.count && editing {
+            
+            cell = tableView.dequeueReusableCellWithIdentifier("NewRowCell", forIndexPath: indexPath)
             
             cell.textLabel?.text = "Add Row"
             cell.detailTextLabel?.text = nil
@@ -106,16 +111,27 @@ extension ShowIconsTableViewController {
             
         } else {
             
-            let icon = iconSet.icons[indexPath.row]
-            
-            cell.textLabel?.text = icon.title
-            cell.detailTextLabel?.text = icon.subtitle
-            if let iconImage = icon.image {
-                cell.imageView?.image = iconImage
+            cell = tableView.dequeueReusableCellWithIdentifier("IconCell", forIndexPath: indexPath)
+            if let iconCell = cell as? IconTableViewCell {
                 
-            } else {
-                // sets image in a new row to empty instead of recycling the images for a new cell
-                cell.imageView?.image = nil
+                let icon = iconSet.icons[indexPath.row]
+                iconCell.titleLable.text = icon.title
+                iconCell.subTitleLabel.text = icon.subtitle
+                
+                if let iconImage = icon.image {
+                    iconCell.iconImageView?.image = iconImage
+                    
+                } else {
+                    // sets image in a new row to empty instead of recycling the images for a new cell
+                    iconCell.iconImageView?.image = nil
+                }
+                
+                if icon.rating == .Awesome {
+                    iconCell.favoriteImageView.image = UIImage(named: "star_sel.png")
+                } else {
+                    iconCell.favoriteImageView.image = UIImage(named: "star_uns.png")
+                }
+                
             }
         }
         

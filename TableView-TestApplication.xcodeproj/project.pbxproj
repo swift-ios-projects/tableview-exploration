@@ -37,6 +37,7 @@
 		E148F64F1C12B6B900AF093E /* eyeball.png in Resources */ = {isa = PBXBuildFile; fileRef = E148F64C1C12B6B900AF093E /* eyeball.png */; };
 		E148F6501C12B6B900AF093E /* star_sel.png in Resources */ = {isa = PBXBuildFile; fileRef = E148F64D1C12B6B900AF093E /* star_sel.png */; };
 		E148F6511C12B6B900AF093E /* star_uns.png in Resources */ = {isa = PBXBuildFile; fileRef = E148F64E1C12B6B900AF093E /* star_uns.png */; };
+		E148F6531C13F63500AF093E /* IconTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E148F6521C13F63500AF093E /* IconTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		E148F64C1C12B6B900AF093E /* eyeball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = eyeball.png; path = Images/eyeball.png; sourceTree = "<group>"; };
 		E148F64D1C12B6B900AF093E /* star_sel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star_sel.png; path = Images/star_sel.png; sourceTree = "<group>"; };
 		E148F64E1C12B6B900AF093E /* star_uns.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star_uns.png; path = Images/star_uns.png; sourceTree = "<group>"; };
+		E148F6521C13F63500AF093E /* IconTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				E113A7281C116C20007C8A0C /* Icon.swift */,
 				E113A72A1C116C20007C8A0C /* IconSet.swift */,
 				E113A71A1C116B26007C8A0C /* Main.storyboard */,
+				E148F6521C13F63500AF093E /* IconTableViewCell.swift */,
 				E148F61D1C12B1E700AF093E /* ShowIconsTableViewController.swift */,
 				E113A71D1C116B26007C8A0C /* Assets.xcassets */,
 				E113A71F1C116B26007C8A0C /* LaunchScreen.storyboard */,
@@ -250,6 +253,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E148F6531C13F63500AF093E /* IconTableViewCell.swift in Sources */,
 				E113A72C1C116C20007C8A0C /* Icon.swift in Sources */,
 				E113A72E1C116C20007C8A0C /* IconSet.swift in Sources */,
 				E113A7171C116B26007C8A0C /* AppDelegate.swift in Sources */,
