@@ -32,10 +32,33 @@ class ShowIconsTableViewController: UITableViewController {
 
         
     }
+    
+    // reloads data when changes are made and they leave the Edit screen
+    override func viewWillAppear(animated: Bool) {
+        tableView.reloadData()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        //prepare for segue ro edit view controller
+        if segue.identifier == "goToEdit" {
+            
+            let editViewController = segue.destinationViewController as? EditTableViewController
+            if let indexPath = tableView.indexPathForSelectedRow {
+                
+                let set = iconSets[indexPath.section]
+                let icon = set.icons[indexPath.row]
+                editViewController?.icon = icon
+                
+            }
+            
+        }
     }
 }
 
