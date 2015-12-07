@@ -43,6 +43,14 @@ class EditTableViewController: UITableViewController {
         ratingLabel.text = String(icon.rating)
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "GoToRating" {
+            if let ratingController = segue.destinationViewController as? RatingTableViewController {
+                ratingController.icon = icon
+            }
+        }
+    }
+    
     // the exact opposite code of viewWillAppear
     override func viewWillDisappear(animated: Bool) {
         guard let icon = icon else {

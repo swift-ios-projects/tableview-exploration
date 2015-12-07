@@ -13,6 +13,7 @@
 		E113A7211C116B26007C8A0C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E113A71F1C116B26007C8A0C /* LaunchScreen.storyboard */; };
 		E113A72C1C116C20007C8A0C /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E113A7281C116C20007C8A0C /* Icon.swift */; };
 		E113A72E1C116C20007C8A0C /* IconSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E113A72A1C116C20007C8A0C /* IconSet.swift */; };
+		E140FAE61C1549770087D5C4 /* RatingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E140FAE51C1549770087D5C4 /* RatingTableViewController.swift */; };
 		E148F61E1C12B1E700AF093E /* ShowIconsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E148F61D1C12B1E700AF093E /* ShowIconsTableViewController.swift */; };
 		E148F6371C12B68B00AF093E /* icons_winter_01.png in Resources */ = {isa = PBXBuildFile; fileRef = E148F6231C12B68B00AF093E /* icons_winter_01.png */; };
 		E148F6381C12B68B00AF093E /* icons_winter_02.png in Resources */ = {isa = PBXBuildFile; fileRef = E148F6241C12B68B00AF093E /* icons_winter_02.png */; };
@@ -50,6 +51,7 @@
 		E113A7221C116B26007C8A0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E113A7281C116C20007C8A0C /* Icon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		E113A72A1C116C20007C8A0C /* IconSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconSet.swift; sourceTree = "<group>"; };
+		E140FAE51C1549770087D5C4 /* RatingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingTableViewController.swift; sourceTree = "<group>"; };
 		E148F61D1C12B1E700AF093E /* ShowIconsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowIconsTableViewController.swift; sourceTree = "<group>"; };
 		E148F6231C12B68B00AF093E /* icons_winter_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icons_winter_01.png; sourceTree = "<group>"; };
 		E148F6241C12B68B00AF093E /* icons_winter_02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icons_winter_02.png; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				E113A7281C116C20007C8A0C /* Icon.swift */,
 				E113A72A1C116C20007C8A0C /* IconSet.swift */,
 				E113A71A1C116B26007C8A0C /* Main.storyboard */,
+				E140FAE51C1549770087D5C4 /* RatingTableViewController.swift */,
 				E148F6541C141F4E00AF093E /* EditTableViewController.swift */,
 				E148F6521C13F63500AF093E /* IconTableViewCell.swift */,
 				E148F61D1C12B1E700AF093E /* ShowIconsTableViewController.swift */,
@@ -257,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E148F6531C13F63500AF093E /* IconTableViewCell.swift in Sources */,
+				E140FAE61C1549770087D5C4 /* RatingTableViewController.swift in Sources */,
 				E148F6551C141F4E00AF093E /* EditTableViewController.swift in Sources */,
 				E113A72C1C116C20007C8A0C /* Icon.swift in Sources */,
 				E113A72E1C116C20007C8A0C /* IconSet.swift in Sources */,
