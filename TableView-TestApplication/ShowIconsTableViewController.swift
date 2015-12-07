@@ -13,14 +13,47 @@ class ShowIconsTableViewController: UITableViewController {
     
     @IBOutlet weak var myTableView: UITableView!
     
-    var iconSets = [IconSet]()
+    // changed to an array of an array, optionals
+    var iconSets: [[Icon?]?]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Initialize iconSet from iconsets Iconsets.swift, then set a variable to be the first set of icons store them in icons variable
         
-        iconSets = IconSet.iconSets()
+        // count of how many letters are in the collation, in english == 26
+        let sectionTitlesCount = UILocalizedIndexedCollation.currentCollation().sectionTitles.count
+        
+        // create 26 elements of iconSets, 1 for each letter
+        var allSections = [[Icon?]?](count: sectionTitlesCount, repeatedValue: nil)
+        
+        let sets = IconSet.iconSets()
+        let collation = UILocalizedIndexedCollation.currentCollation()
+        
+        // loop through each iconSet in sets and every icon in each iconSet and set its section number
+        for iconSet in sets {
+            var sectionNumber: Int
+            for icon in iconSet.icons {
+                sectionNumber = collation.sectionForObject(icon, collationStringSelector: "title")
+                
+                // if the number doesnt exist yet the create an array for it
+                if allSections[sectionNumber] == nil {
+                    allSections[sectionNumber] = [Icon?]()
+                }
+                // append each icon to section
+                allSections[sectionNumber]!.append(icon)
+            }
+        }
+        
+        iconSets = allSections
+        
+        for index in 0 ... iconSets.count - 1 {
+            let iconSet = iconSets[index]
+            if let set = iconSet {
+                set
+                iconSets[index] = set.sort(<)
+            }
+        }
         
         // Allows the user to click a row when editing modeis enabled
         tableView.allowsSelectionDuringEditing = true
@@ -53,7 +86,7 @@ class ShowIconsTableViewController: UITableViewController {
             if let indexPath = tableView.indexPathForSelectedRow {
                 
                 let set = iconSets[indexPath.section]
-                let icon = set.icons[indexPath.row]
+                let icon = set![indexPath.row]
                 editViewController?.icon = icon
                 
             }
@@ -75,7 +108,7 @@ extension ShowIconsTableViewController {
             // This code is to add a new row to the index by enumerating through the rows and then adding a row at the indexPath
             tableView.beginUpdates()
             for (index, set) in iconSets.enumerate() {
-                let indexPath = NSIndexPath(forItem: set.icons.count, inSection: index)
+                let indexPath = NSIndexPath(forItem: set!.count, inSection: index)
                 
                 tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
             }
@@ -85,7 +118,7 @@ extension ShowIconsTableViewController {
         } else {
             tableView.beginUpdates()
             for (index, set) in iconSets.enumerate() {
-                let indexPath = NSIndexPath(forItem: set.icons.count, inSection: index)
+                let indexPath = NSIndexPath(forItem: set!.count, inSection: index)
                 
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
             }
@@ -103,18 +136,24 @@ extension ShowIconsTableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // create variable with iconsets array with all sections, then return the total array icons count
         
-        let adjustment = editing ? 1 : 0
+        //let adjustment = editing ? 1 : 0
+        //let iconSet = iconSets[section]
         
-        let iconSet = iconSets[section]
-        return iconSet.icons.count + adjustment
+        guard let iconSet = iconSets[section] else {
+            return 0
+        }
+        return iconSet.count
     }
     
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
         // create iconSet as array of sections, return iconset names. See Iconset file for details.
-        let iconSet = iconSets[section]
-        return iconSet.name
+        
+        /*let iconSet = iconSets[section]
+        commented out to show indexing
+        */
+        return UILocalizedIndexedCollation.currentCollation().sectionTitles[section]
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -124,7 +163,9 @@ extension ShowIconsTableViewController {
         //set icon set to array of all sections
         let iconSet = iconSets[indexPath.section]
         
-        if indexPath.row >= iconSet.icons.count && editing {
+        let set = iconSets[indexPath.section]
+        
+        if indexPath.row >= iconSet!.count && editing {
             
             cell = tableView.dequeueReusableCellWithIdentifier("NewRowCell", forIndexPath: indexPath)
             
@@ -137,11 +178,11 @@ extension ShowIconsTableViewController {
             cell = tableView.dequeueReusableCellWithIdentifier("IconCell", forIndexPath: indexPath)
             if let iconCell = cell as? IconTableViewCell {
                 
-                let icon = iconSet.icons[indexPath.row]
-                iconCell.titleLable.text = icon.title
-                iconCell.subTitleLabel.text = icon.subtitle
+                let icon = set![indexPath.row]
+                iconCell.titleLable.text = icon!.title
+                iconCell.subTitleLabel.text = icon!.subtitle
                 
-                if let iconImage = icon.image {
+                if let iconImage = icon!.image {
                     iconCell.iconImageView?.image = iconImage
                     
                 } else {
@@ -149,7 +190,7 @@ extension ShowIconsTableViewController {
                     iconCell.iconImageView?.image = nil
                 }
                 
-                if icon.rating == .Awesome {
+                if icon!.rating == .Awesome {
                     iconCell.favoriteImageView.image = UIImage(named: "star_sel.png")
                 } else {
                     iconCell.favoriteImageView.image = UIImage(named: "star_uns.png")
@@ -163,19 +204,19 @@ extension ShowIconsTableViewController {
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
+        var set = iconSets[indexPath.section]
+        
         // check if editing style is .Delete
         if editingStyle == .Delete {
             
-            let set = iconSets[indexPath.section]
-            set.icons.removeAtIndex(indexPath.row)
+            set!.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         
         } else if editingStyle == .Insert {
             
             // This block of code adds a new row when the inset editing style button is tapped
             let newIcon = Icon(withTitle: "New Icon", subtitle: "", imageName: nil)
-            let set = iconSets[indexPath.section]
-            set.icons.append(newIcon)
+            set!.append(newIcon)
             tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
             
         }
@@ -188,7 +229,7 @@ extension ShowIconsTableViewController {
         let set = iconSets[indexPath.section]
         
         // if row is bigger than the set count them add insert button, else return the delete button
-        if indexPath.row >= set.icons.count {
+        if indexPath.row >= set!.count {
             return .Insert
         }
         return .Delete
@@ -197,7 +238,7 @@ extension ShowIconsTableViewController {
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
         
         let set = iconSets[indexPath.section]
-        if editing && indexPath.row < set.icons.count {
+        if editing && indexPath.row < set!.count {
             return nil
         }
         
@@ -210,7 +251,7 @@ extension ShowIconsTableViewController {
         
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let set = iconSets[indexPath.section]
-        if indexPath.row >= set.icons.count && editing {
+        if indexPath.row >= set!.count && editing {
             self.tableView(tableView, commitEditingStyle: .Insert, forRowAtIndexPath: indexPath)
         }
     }
@@ -218,12 +259,13 @@ extension ShowIconsTableViewController {
     // checking if this is a row or an ad icon row
     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         let iconSet = iconSets[indexPath.section]
-        if indexPath.row >= iconSet.icons.count && editing {
+        if indexPath.row >= iconSet!.count && editing {
             return false
         }
         return true
     }
     
+    /* Commmented out to show indexing
     override func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
         let sourceSet = iconSets[sourceIndexPath.section]
         let destinationSet = iconSets[destinationIndexPath.section]
@@ -240,17 +282,40 @@ extension ShowIconsTableViewController {
             sourceSet.icons.removeAtIndex(sourceIndexPath.row)
         }
     }
+    */
     
     // checking wether you can move something to a correct index path, otherwise provide a new one
     // stops an error whe you drop a cell beyond the add cell button
     override func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
         
         let set = iconSets[proposedDestinationIndexPath.section]
-        if proposedDestinationIndexPath.row >= set.icons.count {
-            return NSIndexPath(forItem: set.icons.count-1, inSection: proposedDestinationIndexPath.section)
+        if proposedDestinationIndexPath.row >= set!.count {
+            return NSIndexPath(forItem: set!.count-1, inSection: proposedDestinationIndexPath.section)
         }
         return proposedDestinationIndexPath
     }
+    
+    // The following 2 methods are used to show a alphabetical side scroll for the tableView
+    override func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+        return UILocalizedIndexedCollation.currentCollation().sectionTitles
+    }
+    
+    // this function lets you skip through empty section in your tableView
+    override func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
+        var sectionIndex = UILocalizedIndexedCollation.currentCollation().sectionForSectionIndexTitleAtIndex(index)
+        let totalSections = iconSets.count
+        for counter in index ... totalSections - 1 {
+            if iconSets[counter]?.count > 0 {
+                sectionIndex = counter
+                break
+            }
+        }
+        return sectionIndex
+        
+    }
+    
+    
+    
 }
 
 

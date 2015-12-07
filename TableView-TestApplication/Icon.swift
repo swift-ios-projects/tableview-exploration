@@ -9,7 +9,7 @@ enum RatingType : Int {
     case TotalRatings
 }
 
-class Icon {
+class Icon: NSObject, Comparable {
     
     var title: String
     var subtitle: String
@@ -27,4 +27,12 @@ class Icon {
         
         
     }  
+}
+
+func < (lhs: Icon, rhs: Icon) -> Bool {
+    return lhs.title < rhs.title
+}
+
+func == (lhs: Icon, rhs: Icon) -> Bool {
+    return lhs.title == rhs.title && lhs.subtitle == rhs.subtitle
 }
